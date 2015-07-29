@@ -16,7 +16,7 @@ function confirmKeyLengthFriedman($aCipher, $aKeyLengths)
 		calculateBestGuessKeyLength();
 
 		exitEvent();
-	}
+	};
 
 
 	var calculateICForEachKeylength = function()
@@ -26,14 +26,14 @@ function confirmKeyLengthFriedman($aCipher, $aKeyLengths)
 			var $lIC = getICForKeyLength($lKeyLength);
 			addToICs($lKeyLength, $lIC);
 		});
-	}
+	};
 
 
 	var getICForKeyLength = function($aKeyLength)
 	{
 		var $lColumns = splitTextIntoColumns($aKeyLength);
 		return getDeltaBarIC($lColumns);
-	}
+	};
 
 
 	var splitTextIntoColumns = function($aAmountOfColumns)
@@ -47,7 +47,7 @@ function confirmKeyLengthFriedman($aCipher, $aKeyLengths)
 		}
 
 		return $lColumns;
-	}
+	};
 
 
 	var getEachNthCharacterFromCipher = function($N, $aOffset)
@@ -61,7 +61,7 @@ function confirmKeyLengthFriedman($aCipher, $aKeyLengths)
 		}
 
 		return $lString;
-	}
+	};
 
 
 	var getDeltaBarIC = function($aColumns)
@@ -77,7 +77,7 @@ function confirmKeyLengthFriedman($aCipher, $aKeyLengths)
 
 		log(': ' + $lDeltaBar);
 		return $lDeltaBar;
-	}
+	};
 
 
 	//@TODO: refactor
@@ -100,7 +100,7 @@ function confirmKeyLengthFriedman($aCipher, $aKeyLengths)
 	  	var $lIC = $lSum / ($lTotalChars*($lTotalChars-1));
 
 	    return $lIC;
-	}
+	};
 
 
 	var getArrayOfZeroes = function($aAmount)
@@ -110,7 +110,7 @@ function confirmKeyLengthFriedman($aCipher, $aKeyLengths)
 	    	$lArray[$i] = 0;		    	
 	    }
 	    return $lArray;
-	}
+	};
 
 
 	var getAverageIC = function($aICs)
@@ -121,13 +121,13 @@ function confirmKeyLengthFriedman($aCipher, $aKeyLengths)
 		});
 
 		return $lSum / $aICs.length;
-	}
+	};
 
 
 	var addToICs = function($aKeyLength, $aIC)
 	{
 		$mICs.push( [$aKeyLength, $aIC] );
-	}
+	};
 
 	var calculateBestGuessKeyLength = function()
 	{
@@ -140,7 +140,7 @@ function confirmKeyLengthFriedman($aCipher, $aKeyLengths)
 		var $lSorted = sortObjectByValue($lPrunedDeltas, false);
 
 		$mBestGuessKeyLength = $lSorted[0][0];
-	}
+	};
 
 
 	//@TODO: refactor
@@ -158,13 +158,13 @@ function confirmKeyLengthFriedman($aCipher, $aKeyLengths)
 					$lIsMultiple = ( $lHigh[0] % $lLow[0] === 0 ),
 					$lDifference = Math.abs( ($lHigh[1] / $lLow[1]) - 1 );
 
-				if( $lIsMultiple && $lDifference < .1 ) {
+				if( $lIsMultiple && $lDifference < 0.1 ) {
 					delete $aDeltas[$lHigh[0]];
 				}
 			}
 		}
 		return $aDeltas;
-	}
+	};
 
 
 	var exitEvent = function($aKeyLength, $aLanguage)
@@ -172,7 +172,7 @@ function confirmKeyLengthFriedman($aCipher, $aKeyLengths)
 		log('Best guess for keylength: ' + $mBestGuessKeyLength, true);
 
 		$(document).trigger('FriedmanEnded', $mBestGuessKeyLength);
-	}
+	};
 
 
 	init();

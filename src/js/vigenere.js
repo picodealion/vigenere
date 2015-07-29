@@ -21,7 +21,7 @@ function Decipher()
 		defineStepsByEvents();
 
 		startDeciphering();
-	}
+	};
 
 
 	var defineStepsByEvents = function() 
@@ -35,14 +35,14 @@ function Decipher()
 			log('Finished step 2', true);
 			console.log('all done (for now)');
 		});
-	}
+	};
 
 
 	var startDeciphering = function()
 	{
 		log('Starting to decipher'); 
 		defineKeyLengthKasiski($mCipher, MINLENGTH, MAXLENGTH);
-	}
+	};
 
 
 	init();
@@ -56,7 +56,7 @@ var fragmentedFor = function($aFragmentLength, $aTotal, $aFunction, $aCallback)
 	var getTotal = function()
 	{
 		return (typeof($aTotal) === 'function') ? $aTotal() : $aTotal;
-	}
+	};
 	getTotal(); // @TODO: find out why forLoop() bugs out if I don't launch getTotal() here first
 
 	// simulate a for loop, but in fragments to prevent the browser from freezing
@@ -77,7 +77,7 @@ var fragmentedFor = function($aFragmentLength, $aTotal, $aFunction, $aCallback)
 			$aCallback();
 		}
 	})();
-}
+};
 
 
 // shell function to run an asynchronous for-loop, to make sure fragmentedFor does not run ahead of itself when nested
@@ -98,13 +98,13 @@ var log = function($aOutput, $aNewLine)
 	var $lOutput = ( ($aNewLine) ? "\r\n" : '') + $aOutput;
 	$('#log').append($lOutput).delay(1);
 	scrollDownLog();
-}
+};
 
 
 var output = function($aText)
 {
 	$('#plaintext').html($aText);
-}
+};
 
 var normalize = function($aText)
 {
@@ -112,13 +112,13 @@ var normalize = function($aText)
 	$lText = $lText.replace(/[^a-z]/gi, '');
 
 	return $lText;
-}
+};
 
 var scrollDownLog = function($aEvent)
 {
 	$lElm = $('#log');
 	$lElm.scrollTop( $lElm.prop("scrollHeight") - $lElm.height() );
-}
+};
 
 
 function objectToArray($aObject) 
@@ -158,4 +158,4 @@ var sortObjectByValue = function($aObject, $aSortDesc)
 	});
 
 	return $lArray;
-}
+};

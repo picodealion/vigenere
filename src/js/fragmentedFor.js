@@ -1,18 +1,18 @@
 
-function fragmentedFor(arguments)
+function fragmentedFor(options)
 {
 	var fragmentLength, totalLoops, runEachLoop, runWhenDone, start;
 
 	var init = function() {
 
-		fragmentLength = arguments.fragmentLength || 10;
-		totalLoops     = arguments.totalLoops;
-		runEachLoop    = arguments.runEachLoop;
-		runWhenDone    = arguments.runWhenDone;
-		start          = arguments.start || 0;
+		fragmentLength = options.fragmentLength || 10;
+		totalLoops     = options.totalLoops;
+		runEachLoop    = options.runEachLoop;
+		runWhenDone    = options.runWhenDone;
+		start          = options.start || 0;
 
 		runNextFragment();
-	}
+	};
 
 
 	var runNextFragment = function()
@@ -30,24 +30,24 @@ function fragmentedFor(arguments)
 		} else { 
 			runWhenDone();
 		}
-	}
+	};
 
 
 	var getTotal = function() {
 		// allows totalLoops argument to be either a variable or a function
 		return isFunction(totalLoops) ? totalLoops() : totalLoops;
-	}
+	};
 
 
 	var isFunction = function(mightBeAFunction)
 	{
 		return typeof(mightBeAFunction) === 'function';
-	}
+	};
 
 
-	var checkIfRequiredArgumentsAreSet() {
+	var checkIfRequiredArgumentsAreSet = function() {
 
-	}
+	};
 
 	init();
 } 
@@ -58,7 +58,7 @@ var fragmentedFor = function($aFragmentLength, $aTotal, $aFunction, $aCallback)
 	var $lStart = 0; 
 	var getTotal = function()
 	{
-	}
+	};
 	getTotal(); // @TODO: find out why forLoop() bugs out if I don't launch getTotal() here first
 
 	// simulate a for loop, but in fragments to prevent the browser from freezing
@@ -79,7 +79,7 @@ var fragmentedFor = function($aFragmentLength, $aTotal, $aFunction, $aCallback)
 			$aCallback();
 		}
 	})();
-}
+};
 
 
 // shell function to run an asynchronous for-loop, to make sure fragmentedFor does not run ahead of itself when nested

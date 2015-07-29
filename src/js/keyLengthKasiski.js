@@ -22,7 +22,7 @@ function defineKeyLengthKasiski($aCipher, $aMinLength, $aMaxLength)
 // return;
 
 		fragmentedForAsync(0, $mAmountOfLengths, runInLoops, onLoopsEnd);
-	}
+	};
 
 
 	var runInLoops = function($aCount, $aNextLoop)
@@ -33,12 +33,12 @@ function defineKeyLengthKasiski($aCipher, $aMinLength, $aMaxLength)
 			$mRecurringStrings = $mRecurringStrings.concat($aRecurring);
 			$aNextLoop();
 		});
-	}
+	};
 
 
 	var findRecurringString = function($aLength, $aCallback)
 	{
-		log('Finding recurring strings of length ' + $aLength, true)
+		log('Finding recurring strings of length ' + $aLength, true);
 
 		$mCurrentStringLength = $aLength;
 		var $lCallback = $aCallback;		
@@ -60,7 +60,7 @@ function defineKeyLengthKasiski($aCipher, $aMinLength, $aMaxLength)
 				$lCallback($lRecurring);
 			}
 		);
-	}
+	};
 
 
 	var addRecurring = function($aString, $aRecurring)
@@ -81,7 +81,7 @@ function defineKeyLengthKasiski($aCipher, $aMinLength, $aMaxLength)
 		}
 
 		return $aRecurring;
-	}
+	};
 
 
 	var	onLoopsEnd = function()
@@ -104,13 +104,13 @@ function defineKeyLengthKasiski($aCipher, $aMinLength, $aMaxLength)
 
 		var $lKeyLengths = guessKeyLength($lDistances); 
 		exitEvent($lKeyLengths);
-	}
+	};
 
 
 	var charsLeft = function()
 	{
 		return $mTempCipher.length - $mCurrentStringLength;
-	}
+	};
 
 
 	var getDistanceBetweenStrings = function($aString) 
@@ -124,7 +124,7 @@ function defineKeyLengthKasiski($aCipher, $aMinLength, $aMaxLength)
 		} 
 
 		return $lDistances;
-	}
+	};
 
 
 	var guessKeyLength = function($aDistances)
@@ -153,7 +153,7 @@ function defineKeyLengthKasiski($aCipher, $aMinLength, $aMaxLength)
 
 		return $lGuess;
 
-	}
+	};
 
 	var getEuclideanGCD = function($aNum1, $aNum2) 
 	{
@@ -167,7 +167,7 @@ function defineKeyLengthKasiski($aCipher, $aMinLength, $aMaxLength)
 		}
 
 		return $lHigh;
-	}
+	};
 
 
 	var countOccurrences = function($aGCDs) 
@@ -179,7 +179,7 @@ function defineKeyLengthKasiski($aCipher, $aMinLength, $aMaxLength)
 		});
 
 		return $lCounter;
-	}
+	};
 
 
 	var exitEvent = function($aKeyLengths)
@@ -188,7 +188,7 @@ function defineKeyLengthKasiski($aCipher, $aMinLength, $aMaxLength)
 		log($aKeyLengths);
 
 		$(document).trigger('KasiskiEnded', [ $aKeyLengths ]);
-	}
+	};
 
 
 	init();
