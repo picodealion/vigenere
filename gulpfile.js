@@ -8,31 +8,16 @@ var concat        = require('gulp-concat'),
 
 var config = {
     dest: "dist",
-    html: {
-        all: "src/**/*.html",
-        options: {
-            module: "app"
-        }
-    },
     scripts: {
         all: "src/**/*.js",
-        main: "src/app.module.js",
         options: {
             mangle: false
         },
-        out: "app.js"
+        out: "vigenere.js"
     },
     server: {
         root: '',
         port: 1337
-    },
-    styles: {
-        all: "src/**/*.scss",
-        autoprefixerOptions: ['last 2 version', 'safari 5', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'],
-        main: "src/module.scss",
-        sassOptions: {
-            style: 'compressed'
-        }
     }
 };
 
