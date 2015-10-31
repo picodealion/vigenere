@@ -11,13 +11,14 @@ module.exports = (function Vigenere()
             minLength: 3,
             maxLength: 12,
             elements: {
-                input: '#ciphertext',
-                output: '#plaintext',
+                input: document.getElementById('ciphertext'),
+                output: document.getElementById('plaintext'),
                 log: document.getElementById('log'),
                 start: document.getElementById('decipher')
             }
         },
-        settings;
+        settings,
+        cipherText;
 
     return {
         init: init
@@ -35,16 +36,18 @@ module.exports = (function Vigenere()
     function start() {
         log('Starting to decipher', true);
 
-        cipher = utils.normalize( $('#ciphertext').val() );
+        cipherText = utils.normalize(settings.elements.input.innerHTML);
 
-        Kasiski(cipher, settings.minLength, settings.maxLength);
+        defineStepsByEvents();
+
+        Kasiski.guessKeyLength(cipherText, settings.minLength, settings.maxLength);
     }
 
     // @todo: fuck this shit
     function defineStepsByEvents() {
         $(document).off('KasiskiEnded').on('KasiskiEnded', function($aEvent, $aKeyLenghts){
             log('Finished step 1', true);
-            confirmKeyLengthFriedman($mCipher, $aKeyLenghts);
+            Friedman.confirmKeyLength(cipherText, $aKeyLenghts);
         });
 
         $(document).off('FriedmanEnded').on('FriedmanEnded', function($aEvent, $aKeyLength){

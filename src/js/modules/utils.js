@@ -26,7 +26,7 @@ module.exports = {
 
 
         /* I still have the feeling I'm doing something horribly wrong */
-        fragmentedFor: function($aFragmentLength, $aTotal, $aFunction, $aCallback)
+        fragmentedFor: function($aFragmentLength, $aTotal, $aFunction, $aCallback, $aBatchEnd)
         {
             var $lStart = 0;
             var getTotal = function()
@@ -44,6 +44,7 @@ module.exports = {
                 for(var $i = $lStart; $i < Math.min($lEnd, getTotal()); $i++) {
                     $aFunction( $i );
                 }
+                $aBatchEnd();
 
                 $lStart += $aFragmentLength;
 
