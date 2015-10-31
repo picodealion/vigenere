@@ -1,4 +1,7 @@
-function defineKeyLengthKasiski($aCipher, $aMinLength, $aMaxLength)
+var utils = require('./utils.js');
+    log = utils.log;
+
+function Kasiski($aCipher, $aMinLength, $aMaxLength)
 {
 	var	$mTempCipher,
 		$mAmountOfLengths,
@@ -21,7 +24,7 @@ function defineKeyLengthKasiski($aCipher, $aMinLength, $aMaxLength)
 // exitEvent($lKeyLengths);
 // return;
 
-		fragmentedForAsync(0, $mAmountOfLengths, runInLoops, onLoopsEnd);
+		utils.fragmentedForAsync(0, $mAmountOfLengths, runInLoops, onLoopsEnd);
 	};
 
 
@@ -46,7 +49,7 @@ function defineKeyLengthKasiski($aCipher, $aMinLength, $aMaxLength)
 
 		// run through the total ciphertext checking for recurring strings of $aLength length
 		// in batches of 10 loops at a time to prevent the browser from freezing
-		fragmentedFor(
+        utils.fragmentedFor(
 			10,
 			charsLeft, //total runs (as a callback function to stay dynamic, it might change)
 			function($aPos) // function to run each loop
@@ -193,3 +196,5 @@ function defineKeyLengthKasiski($aCipher, $aMinLength, $aMaxLength)
 
 	init();
 }
+
+module.exports = Kasiski;

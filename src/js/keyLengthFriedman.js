@@ -1,4 +1,5 @@
-function confirmKeyLengthFriedman($aCipher, $aKeyLengths) 
+
+function confirmKeyLengthFriedman($aCipher, $aKeyLengths)
 {
 	var IC_ENGLISH = 0.067, // "Index of Coincidence"
 		$mICs = [],

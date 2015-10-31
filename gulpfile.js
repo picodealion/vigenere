@@ -1,10 +1,11 @@
 var gulp = require('gulp');
 
-var concat        = require('gulp-concat'),
-    connect       = require('gulp-connect'),
-    del           = require('del'),
-    jshint        = require('gulp-jshint'),
-    uglify        = require('gulp-uglify');
+var browserify = require('gulp-browserify'),
+    concat     = require('gulp-concat'),
+    connect    = require('gulp-connect'),
+    del        = require('del'),
+    jshint     = require('gulp-jshint'),
+    uglify     = require('gulp-uglify');
 
 var config = {
     dest: "dist",
@@ -29,22 +30,22 @@ gulp.task('connect', function () {
     connect.server(config.server);
 });
 
-gulp.task('lint', function() {
-    gulp.src(config.scripts.all)
-        .pipe(jshint())
-        .pipe(jshint.reporter('default'));
-});
 
 gulp.task('scripts', function() {
-   gulp.src(config.scripts.all)
+   gulp.src('src/js/main.js')
+       .pipe(browserify({
+           debug: true
+       }))
+       //.pipe(jshint())
+       //.pipe(jshint.reporter('default'))
        .pipe(concat(config.scripts.out))
        .pipe(uglify())
        .pipe(gulp.dest(config.dest));
 });
 
 gulp.task('watch', function() {
-    gulp.watch(config.scripts.all, ['scripts', 'lint']);
+    gulp.watch(config.scripts.all, ['scripts']);
 });
 
 
-gulp.task('default', ['clean', 'lint', 'scripts', 'watch', 'connect']);
+gulp.task('default', ['clean', 'scripts', 'watch', 'connect']);
