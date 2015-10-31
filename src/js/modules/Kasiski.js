@@ -1,5 +1,7 @@
-var utils = require('./utils.js');
-log = utils.log;
+var utils = require('./utils.js'),
+    q     = require('q'),
+
+    log = utils.log;
 
 module.exports = (function()
 {
@@ -19,6 +21,8 @@ module.exports = (function()
 
     function init($aCipher, $aMinLength, $aMaxLength)
     {
+        var deferred = q.defer();
+
         $mCipher = $aCipher;
         $mMinLength = $aMinLength;
         $mMaxLength = $aMaxLength;
@@ -34,7 +38,12 @@ module.exports = (function()
 // exitEvent($lKeyLengths);
 // return;
 
-        utils.fragmentedForAsync(0, $mAmountOfLengths, runInLoops, onLoopsEnd);
+        utils.fragmentedForAsync(0, $mAmountOfLengths, runInLoops, function() {
+            onLoopsEnd();
+            deferred.resolve([4,6,8]);
+        });
+
+        return deferred.promise;
     }
 
 

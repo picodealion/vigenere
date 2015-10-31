@@ -1,6 +1,7 @@
 'use strict';
 
 var utils = require('./utils.js'),
+    q     = require('q'),
 
     log = utils.log;
 
@@ -14,8 +15,13 @@ module.exports = (function Friedman() {
     };
 
     function confirmKeyLength(cipher, lengths) {
+        var deferred = q.defer();
+
         log('Friedman is my homeboy', true);
-        $(document).trigger('FriedmanEnded', 8);
+
+        deferred.resolve(7);
+
+        return deferred.promise;
     }
 
 }());

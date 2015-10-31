@@ -38,23 +38,16 @@ module.exports = (function Vigenere()
 
         cipherText = utils.normalize(settings.elements.input.innerHTML);
 
-        defineStepsByEvents();
-
-        Kasiski.guessKeyLength(cipherText, settings.minLength, settings.maxLength);
+        Kasiski.guessKeyLength(cipherText, settings.minLength, settings.maxLength)
+            .then(Friedman.confirmKeyLength)
+            .then(end);
     }
 
-    // @todo: fuck this shit
-    function defineStepsByEvents() {
-        $(document).off('KasiskiEnded').on('KasiskiEnded', function($aEvent, $aKeyLenghts){
-            log('Finished step 1', true);
-            Friedman.confirmKeyLength(cipherText, $aKeyLenghts);
-        });
-
-        $(document).off('FriedmanEnded').on('FriedmanEnded', function($aEvent, $aKeyLength){
-            log('Finished step 2', true);
-            console.log('all done (for now)');
-        });
+    function end() {
+        log('Finished step 2', true);
+        console.log('all done (for now)');
     }
+
 }());
 
 
