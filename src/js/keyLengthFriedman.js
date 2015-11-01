@@ -67,8 +67,6 @@ function confirmKeyLengthFriedman($aCipher, $aKeyLengths)
 
 	var getDeltaBarIC = function($aColumns)
 	{
-		console.log('getDeltaBarIC ', $aColumns);
-
 		var $lICs = [];
 		$.each($aColumns, function($lKey, $lColumn){
 			$lICs[$lKey] = getIC($lColumn);

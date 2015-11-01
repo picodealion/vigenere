@@ -26,7 +26,6 @@ module.exports = (function Vigenere()
 
     function init(options) {
         settings = _.assign({}, defaultSettings, options);
-        console.log(settings, options);
 
         log('Welcome to Vigenere Decipher Engine BETA 0.1');
 
@@ -36,12 +35,16 @@ module.exports = (function Vigenere()
     function start() {
         log('Starting to decipher', true);
 
-        cipherText = utils.normalize(settings.elements.input.innerHTML);
+        cipherText = utils.normalize(settings.elements.input.value);
 
         Kasiski.guessKeyLength(cipherText, settings.minLength, settings.maxLength)
             .then(function(lengths) {
-                var length = Friedman.confirmKeyLength(cipherText, lengths);
-
+                var length;
+                try {
+                    length = Friedman.findBestKeyLength(cipherText, lengths);
+                } catch(e) {
+                    console.log(e);
+                }
                 end(length);
             });
     }
@@ -49,7 +52,6 @@ module.exports = (function Vigenere()
     function end(result) {
         log(result);
         log('Finished step 2', true);
-        console.log('all done (for now)');
     }
 
 }());

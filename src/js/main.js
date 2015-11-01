@@ -1,5 +1,5 @@
 var options = {
-    minLength: 4
+    minLength: 2
 };
 
 var Vigenere = require('./vigenere.js');

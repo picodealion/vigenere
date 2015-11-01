@@ -6,14 +6,38 @@ var _     = require('lodash'),
     log = utils.log;
 
 module.exports = (function Friedman() {
-    var settings = {
-            IC: 0.067 // Index of Coincidence for English
-        },
-        cipherText;
+    var cipherText,
+        settings = {
+            IC: 1.73, // Index of Coincidence for English
+            letters: 26 // letters in target language alphabet
+        };
 
     return {
-        confirmKeyLength: confirmKeyLength
+        findBestKeyLength: findBestKeyLength
     };
+
+    /**
+     * @private
+     *
+     * @param {String} text Text to calculate the Index of Coincidence for
+     * @returns {number} IC Index of Coincidence for the supplied text
+     *
+     * See https://en.wikipedia.org/wiki/Index_of_coincidence#Calculation
+     */
+    function calculateIC(text) {
+        var letterCounts = utils.countLetters(text),
+            IC,
+            sum;
+
+        sum = letterCounts.reduce(function(total, count) {
+            return total + (count / text.length) * ((count - 1) / (text.length - 1))
+        }, 0);
+
+        // Normalize
+        IC = settings.letters * sum;
+
+        return IC;
+    }
 
     /**
      * @private
@@ -21,22 +45,26 @@ module.exports = (function Friedman() {
      * @param {Array} lengths An array of possible key lengths for the cipher
      * @returns {Array} ICs an array of arrays, each a keylength-IC pair
      */
-    function calculateICForEachKeylength(lengths) {
-        var ICs = [];
-
-        _.forEach(lengths, function(length) {
+    function calculateICForKeylengths(lengths) {
+        var ICs = lengths.map(function(length) {
             var IC = getICForKeyLength(length);
-
             log('IC for key with length ' + length + ': ' + IC, true);
 
-            ICs.push([length, IC]);
+            return [length, IC];
         });
 
         return ICs;
     }
 
-    function confirmKeyLength(cipher, lengths) {
-        var bestGuess,
+    /**
+     * @public
+     * 
+     * @param {String} cipher The ciphertext to check the best matching key length for
+     * @param {Array} lengths A list of possible key lengths (as defined using the Kasiski method?) 
+     * @returns {Number} bestMatch The key length with the IC closest to the target language
+     */
+    function findBestKeyLength(cipher, lengths) {
+        var bestMatch,
             ICs;
 
         log('Checking most probable key length', true);
@@ -44,10 +72,11 @@ module.exports = (function Friedman() {
 
         cipherText = cipher;
 
-        ICs = calculateICForEachKeylength(lenghts);
-        bestGuess = ICs[0][0]; //calculateBestGuessKeyLength(ICs);
+        ICs = calculateICForKeylengths(lengths);
 
-        return bestGuess;
+        bestMatch = ICs[0][0]; //calculateBestGuessKeyLength(ICs);
+
+        return bestMatch;
     }
 
     /**
@@ -57,7 +86,15 @@ module.exports = (function Friedman() {
      * @returns  {Number} the "delta bar IC" (combined IC of all columns)
      */
     function getDeltaBarIC(columns) {
-        return 3
+        var deltaBarICs = columns.map(function(column) {
+                var IC = calculateIC(column);
+                console.log('getting IC for', column, IC);
+                return IC;
+            }).reduce(function(total, IC) {
+                return total + IC;
+            });
+
+        return deltaBarICs / columns.length;
     }
 
     /**
@@ -82,7 +119,7 @@ module.exports = (function Friedman() {
         var columns = [];
 
         for (var i= 0; i < amount; i++) {
-            var column = utils.getEveryNthChar(string, amount, i);
+            var column = utils.getEveryNthChar(cipherText, amount, i);
             columns.push(column);
         }
 

@@ -39,8 +39,8 @@ module.exports = (function()
 // return;
 
         utils.fragmentedForAsync(0, $mAmountOfLengths, runInLoops, function() {
-            onLoopsEnd();
-            deferred.resolve([4,6,8]);
+            var result = onLoopsEnd();
+            deferred.resolve(result);
         });
 
         return deferred.promise;
@@ -128,7 +128,11 @@ module.exports = (function()
         log($lDistances);
 
         var $lKeyLengths = guessKeyLength($lDistances);
-        exitEvent($lKeyLengths);
+
+        log('Most probable key lengths: ', true);
+        log($lKeyLengths);
+
+        return $lKeyLengths;
     }
 
 
@@ -154,8 +158,6 @@ module.exports = (function()
 
     function guessKeyLength($aDistances)
     {
-
-        console.log($aDistances);
         var $lUniqueDistances = [];
 
         $.each($aDistances, function(i, el){
@@ -204,15 +206,6 @@ module.exports = (function()
         });
 
         return $lCounter;
-    }
-
-
-    function exitEvent($aKeyLengths)
-    {
-        log('Most probable key lengths: ', true);
-        log($aKeyLengths);
-
-        $(document).trigger('KasiskiEnded', [ $aKeyLengths ]);
     }
 
 }());
