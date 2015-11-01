@@ -20,24 +20,38 @@ module.exports = {
     },
 
     /**
-     * @public
+     * @private
      *
-     * @param {String} text Text to get every nth character from
-     * @param {Number} n Duh
-     * @param {Number} offset Start counting at this letter, defaults to 0
+     * @param {String} text The text to split
+     * @param {Number} amount Amount of columns to split the text in
+     * @returns {Array} columns An array of strings, each consisting of every
+     * nth letter in the cipher (where n ranges from 1 to the specified amount)
      *
-     * @returns {String} result String that consists of every nth letter in the text
+     * @example
+     * Given a text of "abcdefghijk" and an amount of 4 columns, will produce:
+     *
+     *    a b c d
+     *    e f g h
+     *    i j k
+     *
+     * The returned columns are then ['aei', 'bfj', 'cgk', 'dh']
      */
-    getEveryNthChar: function(text, n, offset) {
-        var result = '',
-            i = offset || 0;
+    splitTextIntoColumns: function(text, amount) {
+        var columns = [];
 
-        while(text[i]) {
-            result += text[i];
-            i += n;
+        for (var offset = 0; offset < amount; offset++) {
+            var index = offset,
+                column = '';
+
+            while(text[index]) {
+                column += text[index];
+                index += amount;
+            }
+
+            columns.push(column);
         }
 
-        return result;
+        return columns;
     },
 
     log: function($aOutput, $aNewLine)

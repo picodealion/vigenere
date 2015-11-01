@@ -1,11 +1,9 @@
-'use strict';
-
 var _     = require('lodash'),
-    utils = require('./utils.js'),
-
-    log = utils.log;
+    utils = require('./utils.js');
 
 module.exports = (function Friedman() {
+    'use strict';
+
     var cipherText,
         settings = {
             IC: 1.73, // Index of Coincidence for English
@@ -20,7 +18,7 @@ module.exports = (function Friedman() {
      * @private
      *
      * @param {String} text Text to calculate the Index of Coincidence for
-     * @returns {number} IC Index of Coincidence for the supplied text
+     * @returns {Number} IC Index of Coincidence for the supplied text
      *
      * See https://en.wikipedia.org/wiki/Index_of_coincidence#Calculation
      */
@@ -43,17 +41,14 @@ module.exports = (function Friedman() {
      * @private
      *
      * @param {Array} lengths An array of possible key lengths for the cipher
-     * @returns {Array} ICs an array of arrays, each a keylength-IC pair
+     * @returns {Array} an array of objects, each containing a key length and its IC
      */
     function calculateICForKeylengths(lengths) {
-        var ICs = lengths.map(function(length) {
+        return lengths.map(function(length) {
             var IC = getICForKeyLength(length);
-            log('IC for key with length ' + length + ': ' + IC, true);
 
-            return [length, IC];
+            return { length: length, IC: IC };
         });
-
-        return ICs;
     }
 
     /**
@@ -67,14 +62,14 @@ module.exports = (function Friedman() {
         var bestMatch,
             ICs;
 
-        log('Checking most probable key length', true);
-        log('Index of Coincidence for English: ' + settings.IC, true);
+        utils.log('Checking most probable key length', true);
+        utils.log('Index of Coincidence for English: ' + settings.IC, true);
 
         cipherText = cipher;
 
         ICs = calculateICForKeylengths(lengths);
 
-        bestMatch = ICs[0][0]; //calculateBestGuessKeyLength(ICs);
+        bestMatch = 3;// calculateBestGuessKeyLength(ICs);
 
         return bestMatch;
     }
@@ -82,49 +77,27 @@ module.exports = (function Friedman() {
     /**
      * @private
      *
-     * @param {Array} columns The cipher text split up in to columns
-     * @returns  {Number} the "delta bar IC" (combined IC of all columns)
-     */
-    function getDeltaBarIC(columns) {
-        var deltaBarICs = columns.map(function(column) {
-                var IC = calculateIC(column);
-                console.log('getting IC for', column, IC);
-                return IC;
-            }).reduce(function(total, IC) {
-                return total + IC;
-            });
-
-        return deltaBarICs / columns.length;
-    }
-
-    /**
-     * @private
-     *
      * @param {Number} length Key length to check the IC for
-     * @returns  {Number} the IC for the specified keylength
+     * @returns  {Number} IC The IC for the specified keylength
+     *
+     * @description
+     * Splits the cipher text into rows of x length and calculates the
+     * IC of every column it produces
      */
     function getICForKeyLength(length) {
-        var columns = splitTextIntoColumns(length);
-        return getDeltaBarIC(columns);
+        var columns = utils.splitTextIntoColumns(cipherText, length),
+            IC,
+            sumColumnICs;
+
+        sumColumnICs = columns.map(calculateIC).reduce(function(total, IC) {
+            return total + IC;
+        });
+
+        IC = sumColumnICs / columns.length;
+
+        utils.log('IC for key of length ' + length + ': ' + IC, true);
+
+        return IC;
     }
-
-    /**
-     * @private
-     *
-     * @param {Number} amount Amount of columns to split the text in
-     * @returns {Array} columns An array of strings, each consisting of every
-     * nth letter in the cipher (where n ranges from 1 to the specified amount)
-     */
-    function splitTextIntoColumns(amount) {
-        var columns = [];
-
-        for (var i= 0; i < amount; i++) {
-            var column = utils.getEveryNthChar(cipherText, amount, i);
-            columns.push(column);
-        }
-
-        return columns;
-    }
-
 
 }());

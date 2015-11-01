@@ -1,7 +1,6 @@
-var options = {
-    minLength: 2
-};
-
 var Vigenere = require('./vigenere.js');
 
-Vigenere.init(options);
+Vigenere.init({
+    minLength: 2,
+    maxLength: 12
+});

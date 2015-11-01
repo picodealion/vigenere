@@ -43,7 +43,7 @@ module.exports = (function Vigenere()
                 try {
                     length = Friedman.findBestKeyLength(cipherText, lengths);
                 } catch(e) {
-                    console.log(e);
+                    throw new Error(e);
                 }
                 end(length);
             });

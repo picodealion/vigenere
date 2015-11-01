@@ -1,10 +1,10 @@
 var utils = require('./utils.js'),
-    q     = require('q'),
+    q     = require('q');
 
-    log = utils.log;
+module.exports = (function() {
 
-module.exports = (function()
-{
+    // 'use strict';
+
     var $mTempCipher,
         $mAmountOfLengths,
         $mMinLength,
@@ -27,16 +27,11 @@ module.exports = (function()
         $mMinLength = $aMinLength;
         $mMaxLength = $aMaxLength;
 
-        log('Step 1: Define key length using Kasiski method', true);
+        utils.log('Step 1: Define key length using Kasiski method', true);
 
         $mRecurringStrings = [];
         $mTempCipher       = $mCipher;
         $mAmountOfLengths  = $mMaxLength - $mMinLength;
-
-// temp
-// var $lKeyLengths = guessKeyLength([582,1026,297,297,213,1431,63,99,351,174,318,183,582,180,438,213,81,1458,420,384,273,363,126,1131,102,1602,702,534,198,300,243,75,291,669,132,117,516,1059,126,1434,717,330,522,225,1314,204,138,591,246,399,138,120,642,66,132,378,48,105]);
-// exitEvent($lKeyLengths);
-// return;
 
         utils.fragmentedForAsync(0, $mAmountOfLengths, runInLoops, function() {
             var result = onLoopsEnd();
@@ -60,7 +55,7 @@ module.exports = (function()
 
     function findRecurringString($aLength, $aCallback)
     {
-        log('Finding recurring strings of length ' + $aLength, true);
+        utils.log('Finding recurring strings of length ' + $aLength, true);
 
         $mCurrentStringLength = $aLength;
         var $lCallback = $aCallback;
@@ -82,7 +77,7 @@ module.exports = (function()
             },
             function() // callback after each batch
             {
-                log('.');
+                utils.log('.');
             }
         );
     }
@@ -102,7 +97,7 @@ module.exports = (function()
             // replace checked string with a space to prevent from checking itself or substrings again
             $mTempCipher = $mTempCipher.replace($lRegexp, ' ');
             $aRecurring.push($aString);
-            log($aString + " occurs " + $lCount + " time(s)", true);
+            utils.log($aString + " occurs " + $lCount + " time(s)", true);
         }
 
         return $aRecurring;
@@ -112,25 +107,25 @@ module.exports = (function()
     function onLoopsEnd()
     {
         if($mRecurringStrings.length > 0)
-            log("Recurring strings:" + $mRecurringStrings , true);
+            utils.log("Recurring strings:" + $mRecurringStrings , true);
         else {
-            log('No recurring strings found :(. Either the key is too long or the ciphertext is too short to break the code.', true);
+            utils.log('No recurring strings found :(. Either the key is too long or the ciphertext is too short to break the code.', true);
             return false;
         }
 
-        log('Distances between recurring strings: ', true);
+        utils.log('Distances between recurring strings: ', true);
         var $lDistances = [];
 
         // determine distance between each instance of the recurring strings
         $.each($mRecurringStrings, function($lKey, $lVal){
             $lDistances = $lDistances.concat( getDistanceBetweenStrings($lVal) );
         });
-        log($lDistances);
+        utils.log($lDistances);
 
         var $lKeyLengths = guessKeyLength($lDistances);
 
-        log('Most probable key lengths: ', true);
-        log($lKeyLengths);
+        utils.log('Most probable key lengths: ', true);
+        utils.log($lKeyLengths);
 
         return $lKeyLengths;
     }
