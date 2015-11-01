@@ -39,11 +39,15 @@ module.exports = (function Vigenere()
         cipherText = utils.normalize(settings.elements.input.innerHTML);
 
         Kasiski.guessKeyLength(cipherText, settings.minLength, settings.maxLength)
-            .then(Friedman.confirmKeyLength)
-            .then(end);
+            .then(function(lengths) {
+                var length = Friedman.confirmKeyLength(cipherText, lengths);
+
+                end(length);
+            });
     }
 
-    function end() {
+    function end(result) {
+        log(result);
         log('Finished step 2', true);
         console.log('all done (for now)');
     }

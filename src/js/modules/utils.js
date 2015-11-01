@@ -1,6 +1,16 @@
 module.exports = {
 
-        /*** Generic functions ***/
+        getEvertNthChar: function(text, n, offset) {
+            var result = '',
+                i = offset;
+
+            while(text[i]) {
+                result += text[i];
+                i += n;
+            }
+
+            return result;
+        },
 
         log: function($aOutput, $aNewLine)
         {

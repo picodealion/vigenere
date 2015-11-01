@@ -154,6 +154,7 @@ module.exports = (function()
 
     function guessKeyLength($aDistances)
     {
+
         console.log($aDistances);
         var $lUniqueDistances = [];
 
