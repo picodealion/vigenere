@@ -39,12 +39,10 @@ module.exports = (function Vigenere()
 
         Kasiski.guessKeyLength(cipherText, settings.minLength, settings.maxLength)
             .then(function(lengths) {
-                var length;
-                try {
-                    length = Friedman.findBestKeyLength(cipherText, lengths);
-                } catch(e) {
-                    throw new Error(e);
-                }
+                var length = Friedman.findBestKeyLength(cipherText, lengths);
+
+                utils.log('Best guess for key lentgh: ', length);
+
                 end(length);
             });
     }

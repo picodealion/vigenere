@@ -44,10 +44,10 @@ module.exports = (function Friedman() {
      * @returns {Array} an array of objects, each containing a key length and its IC
      */
     function calculateICForKeylengths(lengths) {
-        return lengths.map(function(length) {
-            var IC = getICForKeyLength(length);
+        return lengths.map(function(keyLength) {
+            var IC = getICForKeyLength(keyLength);
 
-            return { length: length, IC: IC };
+            return { keyLength: keyLength, IC: IC };
         });
     }
 
@@ -67,11 +67,10 @@ module.exports = (function Friedman() {
 
         cipherText = cipher;
 
-        ICs = calculateICForKeylengths(lengths);
+        ICs = calculateICForKeylengths(lengths).sort(sortByClosestIC);
+        bestMatch = ICs.sort(sortByClosestIC)[0];
 
-        bestMatch = 3;// calculateBestGuessKeyLength(ICs);
-
-        return bestMatch;
+        return bestMatch.keyLength;
     }
 
     /**
@@ -84,8 +83,8 @@ module.exports = (function Friedman() {
      * Splits the cipher text into rows of x length and calculates the
      * IC of every column it produces
      */
-    function getICForKeyLength(length) {
-        var columns = utils.splitTextIntoColumns(cipherText, length),
+    function getICForKeyLength(keyLength) {
+        var columns = utils.splitTextIntoColumns(cipherText, keyLength),
             IC,
             sumColumnICs;
 
@@ -95,9 +94,13 @@ module.exports = (function Friedman() {
 
         IC = sumColumnICs / columns.length;
 
-        utils.log('IC for key of length ' + length + ': ' + IC, true);
+        utils.log('IC for key of length ' + keyLength + ': ' + IC, true);
 
         return IC;
+    }
+
+    function sortByClosestIC(a, b) {
+        return Math.abs(a.IC - settings.IC) > Math.abs(b.IC - settings.IC);
     }
 
 }());
