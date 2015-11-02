@@ -67,7 +67,7 @@ module.exports = (function Friedman() {
 
         cipherText = cipher;
 
-        ICs = calculateICForKeylengths(lengths).sort(sortByClosestIC);
+        ICs = calculateICForKeylengths(lengths);
         bestMatch = ICs.sort(sortByClosestIC)[0];
 
         return bestMatch.keyLength;
