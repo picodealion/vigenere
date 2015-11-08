@@ -1,7 +1,9 @@
 var _     = require('lodash'),
     utils = require('./utils.js');
 
-module.exports = (function Friedman() {
+module.exports = Friedman();
+
+function Friedman() {
     'use strict';
 
     var cipherText,
@@ -103,4 +105,4 @@ module.exports = (function Friedman() {
         return Math.abs(a.IC - settings.IC) > Math.abs(b.IC - settings.IC);
     }
 
-}());
+}
