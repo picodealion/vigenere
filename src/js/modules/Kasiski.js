@@ -19,7 +19,7 @@ function Kasiski() {
         var distances,
             greatestGCDs,
             recurringStrings;
-
+        
         cipherText = tempCipherText = cipher;
 
         recurringStrings = getRecurringStrings(minLength, maxLength);
@@ -67,24 +67,18 @@ function Kasiski() {
             regexp,
             string;
 
-        while(pos < tempCipherText.length && pos < 100) {
+
+        while(pos < tempCipherText.length - length) {
             string = tempCipherText.substr(pos, length);
+            regexp = new RegExp(string, 'g');
+            count = tempCipherText.match(regexp).length;
 
-            console.log(tempCipherText, length, pos, string);
-
-            if(!string.match(/ /g)) {
-
-                regexp = new RegExp(string, 'g');
-                count = tempCipherText.match(regexp).length;
-
-                if(count > 1) {
-                    debugger;
-                    utils.log(string + ' occurs ' + count + ' times', true);
-                    recurring.push(string);
-                    tempCipherText = tempCipherText.replace(regexp, ' ');
-                }
-
+            if(!string.match(' ') && count > 1) {
+                utils.log(string + ' occurs ' + count + ' times', true);
+                recurring.push(string);
+                tempCipherText = tempCipherText.replace(regexp, ' ');
             }
+
             pos++;
         }
 
