@@ -31,18 +31,19 @@ module.exports = (function Vigenere()
     }
 
     function start() {
+        var bestKeyLength,
+            probableKeyLengths;
+
         utils.log('Starting to decipher', true);
 
         cipherText = utils.normalize(settings.elements.input.value);
 
-        Kasiski.guessKeyLength(cipherText, settings.minLength, settings.maxLength)
-            .then(function(lengths) {
-                var length = Friedman.findBestKeyLength(cipherText, lengths);
+        probableKeyLengths = Kasiski.guessKeyLength(cipherText, settings.minLength, settings.maxLength);
+        bestKeyLength = Friedman.findBestKeyLength(cipherText, probableKeyLengths);
 
-                utils.log('Best guess for key lentgh: ', length);
+        utils.log('Best guess for key lentgh: ', length);
 
-                end(length);
-            });
+        end(bestKeyLength);
     }
 
     function end(result) {

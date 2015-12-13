@@ -9,7 +9,7 @@ function Friedman() {
     var cipherText,
         settings = {
             IC: 1.73, // Index of Coincidence for English
-            letters: 26 // letters in target language alphabet
+            letters: 26 // letters in English alphabet
         };
 
     return {
