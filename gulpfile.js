@@ -11,6 +11,7 @@ var config = {
     dest: "dist",
     scripts: {
         all: "src/**/*.js",
+        main: "src/js/main.js",
         options: {
             mangle: false
         },
@@ -26,26 +27,29 @@ gulp.task('clean', function() {
    del(config.dest + "/**/*");
 });
 
-gulp.task('connect', function () {
+gulp.task('connect', function() {
     connect.server(config.server);
 });
 
+gulp.task('hint', function() {
+    gulp.src(config.scripts.all)
+        .pipe(jshint())
+        .pipe(jshint.reporter('default'));
+});
 
 gulp.task('scripts', function() {
-   gulp.src('src/js/main.js')
+   gulp.src(config.scripts.main)
        .pipe(browserify({
            debug: true
        }))
-       //.pipe(jshint())
-       //.pipe(jshint.reporter('default'))
        .pipe(concat(config.scripts.out))
        .pipe(uglify())
        .pipe(gulp.dest(config.dest));
 });
 
 gulp.task('watch', function() {
-    gulp.watch(config.scripts.all, ['scripts']);
+    gulp.watch(config.scripts.all, ['hint', 'scripts']);
 });
 
 
-gulp.task('default', ['clean', 'scripts', 'watch', 'connect']);
+gulp.task('default', ['clean', 'hint', 'scripts', 'watch', 'connect']);

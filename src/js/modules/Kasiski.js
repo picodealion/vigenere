@@ -80,7 +80,7 @@ function Kasiski() {
         }
 
         if(recurring.length > 0)
-            utils.log("Recurring strings:" + recurring.map(function(item) { return item.string }));
+            utils.log("Recurring strings:" + recurring.map(function(item) { return item.string; }));
         else {
             utils.log('No recurring strings found :(. Either the key is too long or the ciphertext is too short to break the code.');
         }

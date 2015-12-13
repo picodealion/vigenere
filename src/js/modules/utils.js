@@ -35,7 +35,7 @@ function Utils() {
 
         for(i = min; i < Math.floor(number / 2); i++) {
             if(number % i === 0) {
-                factors.push(i)
+                factors.push(i);
             }
         }
 
@@ -79,14 +79,14 @@ function Utils() {
 
     function log(output)
     {
-        var log = document.getElementById('log'),
+        var logElement = document.getElementById('log'),
             logline = document.createElement('span');
 
         logline.innerText = output;
         logline.className = "logline";
 
-        log.appendChild(logline);
-        log.scrollTop = log.scrollHeight;
+        logElement.appendChild(logline);
+        logElement.scrollTop = logElement.scrollHeight;
     }
 
     function normalize(input)

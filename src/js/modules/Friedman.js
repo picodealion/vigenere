@@ -27,7 +27,7 @@ function Friedman() {
             sum;
 
         sum = letterCounts.reduce(function(total, count) {
-            return total + (count / text.length) * ((count - 1) / (text.length - 1))
+            return total + (count / text.length) * ((count - 1) / (text.length - 1));
         }, 0);
 
         // Normalize
