@@ -1,5 +1,4 @@
-var _     = require('lodash'),
-    utils = require('./utils.js');
+var utils = require('./utils.js');
 
 module.exports = Kasiski();
 
@@ -14,74 +13,85 @@ function Kasiski() {
 
     function guessKeyLength(cipher, minLength, maxLength) {
         var distances,
-            greatestGCDs,
+            GCDs,
             recurringStrings;
 
-        utils.log('Step 1: Define key length using Kasiski method', true);
+        utils.log('Step 1: Define key length using Kasiski method');
 
         cipherText = cipher;
 
         recurringStrings = getRecurringStrings(minLength, maxLength);
-        distances = getDistancesBetweenStrings(recurringStrings);
-        greatestGCDs = getGreatestCommonDenominators(distances);
+        distances = getDistances(recurringStrings);
+        GCDs = getGreatestCommonDenominators(distances);
 
-        utils.log('Most probable key lengths: ' + greatestGCDs, true);
+        utils.log('Most probable key lengths: ' + GCDs);
 
-        return greatestGCDs;
+        return GCDs;
     }
 
-    function getDistancesBetweenStrings(strings) {
-        utils.log('Distances between recurring strings: ', true);
+    function getDistances(recurringStrings) {
+        var allDistances,
+            currentDistances,
+            i;
 
-        return [40, 12, 16];
+        utils.log('Distances between recurring strings:');
+
+        allDistances = recurringStrings.map(function(item) {
+            currentDistances = [];
+
+            for (i = 0; i < item.positions.length - 1; i++) {
+                currentDistances.push(item.positions[i + 1] - item.positions[i]);
+            }
+
+            return currentDistances;
+        }).reduce(function(all, current) {
+            return all.concat(current);
+        });
+
+        utils.log(allDistances);
+
+        return allDistances;
     }
 
     function getGreatestCommonDenominators(numbers) {
-        return [4, 8, 12];
+        var factorCount,
+            factors,
+            GCDs;
+
+        factors = numbers.reduce(function(all, current) {
+            return all.concat(utils.getFactors(current, 3));
+        }, []);
+
+        factorCount = factors.reduce(function(counted, current) {
+            counted[current] = ++counted[current] || 1;
+            return counted;
+        }, {});
+
+        GCDs = factors.filter(utils.unique).sort(function(a, b) {
+            return factorCount[b] - factorCount[a];
+        });
+
+        return GCDs.slice(0, 3);
     }
 
     function getRecurringStrings(minLength, maxLength) {
-        var recurring = [],
-            result;
+        var recurring = [];
 
-        for(var i = maxLength; i > minLength; i--) {
+        for(var i = maxLength; i >= minLength; i--) {
             recurring = recurring.concat(getRecurringStringsOfLength(i));
         }
 
-        // transform results to a little more useful format
-        result = recurring.reduce(function(result, current) {
-            result.strings.push(current.string);
-            result.positions = result.positions.concat(current.positions);
-
-            return result;
-        }, { strings: [], positions: []});
-
         if(recurring.length > 0)
-            utils.log("Recurring strings:" + result.strings, true);
+            utils.log("Recurring strings:" + recurring.map(function(item) { return item.string }));
         else {
-            utils.log('No recurring strings found :(. Either the key is too long or the ciphertext is too short to break the code.', true);
+            utils.log('No recurring strings found :(. Either the key is too long or the ciphertext is too short to break the code.');
         }
 
         return recurring;
     }
 
-    function getRecurringStringPositions(string) {
-        var match,
-            regexp = new RegExp(string, 'g'),
-            result = { string: string, positions: [] };
-
-        while((match = regexp.exec(cipherText)) !== null) {
-            result.positions.push(match.index);
-
-            // replace match with spaces so we don't get overlapping results
-            cipherText = replaceWithSpaces(cipherText, match.index, match.index + string.length);
-        }
-
-        return result;
-    }
-
     function getRecurringStringsOfLength(length) {
-        utils.log('Finding recurring strings of length ' + length, true);
+        utils.log('Finding recurring strings of length ' + length);
 
         var count,
             pos = 0,
@@ -95,8 +105,8 @@ function Kasiski() {
             count = cipherText.match(regexp).length;
 
             if(!string.match(' ') && count > 1) {
-                utils.log(string + ' occurs ' + count + ' times', true);
-                recurring.push(getRecurringStringPositions(string));
+                utils.log(string + ' occurs ' + count + ' times');
+                recurring.push(getStringPositions(string));
             }
 
             pos++;
@@ -105,15 +115,18 @@ function Kasiski() {
         return recurring;
     }
 
-    function replaceWithSpaces(text, start, end) {
-        var i,
-            spaces = '';
+    function getStringPositions(string) {
+        var match,
+            regexp = new RegExp(string, 'g'),
+            result = { string: string, positions: [] };
 
-        for(i = 0; i < (end - start); i++) {
-            spaces += ' ';
+        while((match = regexp.exec(cipherText)) !== null) {
+            result.positions.push(match.index);
+
+            // replace match with spaces so we don't get overlapping results
+            cipherText = utils.replaceWithSpaces(cipherText, match.index, match.index + string.length);
         }
 
-        return text.substring(0, start) + spaces + text.substring(end);
+        return result;
     }
-
 }

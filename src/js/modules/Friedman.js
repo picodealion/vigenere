@@ -1,5 +1,4 @@
-var _     = require('lodash'),
-    utils = require('./utils.js');
+var utils = require('./utils.js');
 
 module.exports = Friedman();
 
@@ -78,7 +77,7 @@ function Friedman() {
     /**
      * @private
      *
-     * @param {Number} length Key length to check the IC for
+     * @param {Number} keyLength Key length to check the IC for
      * @returns  {Number} IC The IC for the specified keylength
      *
      * @description

@@ -34,7 +34,7 @@ module.exports = (function Vigenere()
         var bestKeyLength,
             probableKeyLengths;
 
-        utils.log('Starting to decipher', true);
+        utils.log('Starting to decipher');
 
         cipherText = utils.normalize(settings.elements.input.value);
 
@@ -48,7 +48,7 @@ module.exports = (function Vigenere()
 
     function end(result) {
         utils.log(result);
-        utils.log('Finished step 2', true);
+        utils.log('Finished step 2');
     }
 
 }());
