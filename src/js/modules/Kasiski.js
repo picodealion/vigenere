@@ -1,7 +1,5 @@
 var utils = require('./utils.js');
 
-module.exports = Kasiski();
-
 function Kasiski() {
     'use strict';
 
@@ -130,3 +128,5 @@ function Kasiski() {
         return result;
     }
 }
+
+module.exports = Kasiski();

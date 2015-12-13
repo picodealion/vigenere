@@ -3,8 +3,9 @@ var _        = require('lodash'),
     Kasiski  = require('./modules/Kasiski.js'),
     Friedman = require('./modules/Friedman.js');
 
-module.exports = (function Vigenere()
-{
+module.exports = Vigenere();
+
+function Vigenere() {
     var defaultSettings = {
             minLength: 3,
             maxLength: 12,
@@ -50,8 +51,4 @@ module.exports = (function Vigenere()
         utils.log(result);
         utils.log('Finished step 2');
     }
-
-}());
-
-
-
+}

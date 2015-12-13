@@ -1,4 +1,14 @@
-module.exports = {
+function Utils() {
+
+    return {
+        countLetters: countLetters,
+        getFactors: getFactors,
+        log: log,
+        normalize: normalize,
+        replaceWithSpaces: replaceWithSpaces,
+        splitTextIntoColumns: splitTextIntoColumns,
+        unique: unique
+    };
 
     /**
      * @public
@@ -8,8 +18,8 @@ module.exports = {
      *
      * @todo: refactor to be more flexible and with more error checking
      */
-    countLetters: function(text) {
-       var counts = new Array(26+1).join('0').split('').map(Number); // zero-filled array
+    function countLetters(text) {
+        var counts = new Array(26+1).join('0').split('').map(Number); // zero-filled array
 
         for(var i = 0; i < text.length; i++) {
             var charIndex = text.charCodeAt(i) - 97;
@@ -17,9 +27,9 @@ module.exports = {
         }
 
         return counts;
-    },
+    }
 
-    getFactors: function(number, min) {
+    function getFactors(number, min) {
         var factors = [],
             i;
 
@@ -30,7 +40,7 @@ module.exports = {
         }
 
         return factors;
-    },
+    }
 
     /**
      * @private
@@ -49,7 +59,7 @@ module.exports = {
      *
      * The returned columns are then ['aei', 'bfj', 'cgk', 'dh']
      */
-    splitTextIntoColumns: function(text, amount) {
+    function splitTextIntoColumns(text, amount) {
         var columns = [];
 
         for (var offset = 0; offset < amount; offset++) {
@@ -65,21 +75,26 @@ module.exports = {
         }
 
         return columns;
-    },
+    }
 
-    log: function(output)
+    function log(output)
     {
-        var $log = $('#log');
+        var log = document.getElementById('log'),
+            logline = document.createElement('span');
 
-        $log.append(output + "\r\n").delay(1).scrollTop( $log.prop("scrollHeight") - $log.height() );
-    },
+        logline.innerText = output;
+        logline.className = "logline";
 
-    normalize: function(input)
+        log.appendChild(logline);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    function normalize(input)
     {
         return input.toLowerCase().replace(/[^a-z]/g, '');
-    },
+    }
 
-    replaceWithSpaces: function(text, start, end) {
+    function replaceWithSpaces(text, start, end) {
         var i,
             spaces = '';
 
@@ -88,9 +103,11 @@ module.exports = {
         }
 
         return text.substring(0, start) + spaces + text.substring(end);
-    },
+    }
 
-    unique: function(item, index, self) {
+    function unique(item, index, self) {
         return index === self.indexOf(item);
     }
-};
+}
+
+module.exports = Utils();

@@ -1,7 +1,5 @@
 var utils = require('./utils.js');
 
-module.exports = Friedman();
-
 function Friedman() {
     'use strict';
 
@@ -105,3 +103,5 @@ function Friedman() {
     }
 
 }
+
+module.exports = Friedman();
