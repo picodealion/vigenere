@@ -1,6 +1,7 @@
 function Utils() {
 
     return {
+        calculateIC: calculateIC,
         countLetters: countLetters,
         getFactors: getFactors,
         log: log,
@@ -10,6 +11,30 @@ function Utils() {
         splitTextIntoColumns: splitTextIntoColumns,
         unique: unique
     };
+
+
+    /**
+     * @public
+     *
+     * @param {String} text Text to calculate the Index of Coincidence for
+     * @returns {Number} IC Index of Coincidence for the supplied text
+     *
+     * See https://en.wikipedia.org/wiki/Index_of_coincidence#Calculation
+     */
+    function calculateIC(text) {
+        var letterCounts = countLetters(text),
+            IC,
+            sum;
+
+        sum = letterCounts.reduce(function(total, count) {
+            return total + (count / text.length) * ((count - 1) / (text.length - 1));
+        }, 0);
+
+        // Normalize
+        IC = 26 * sum;
+
+        return IC;
+    }
 
     /**
      * @public

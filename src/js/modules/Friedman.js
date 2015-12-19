@@ -4,37 +4,11 @@ function Friedman() {
     'use strict';
 
     var cipherText,
-        settings = {
-            IC: 1.73, // Index of Coincidence for English
-            letters: 26 // letters in English alphabet
-        };
+        IC_ENGLISH = 1.73;
 
     return {
         findBestKeyLength: findBestKeyLength
     };
-
-    /**
-     * @private
-     *
-     * @param {String} text Text to calculate the Index of Coincidence for
-     * @returns {Number} IC Index of Coincidence for the supplied text
-     *
-     * See https://en.wikipedia.org/wiki/Index_of_coincidence#Calculation
-     */
-    function calculateIC(text) {
-        var letterCounts = utils.countLetters(text),
-            IC,
-            sum;
-
-        sum = letterCounts.reduce(function(total, count) {
-            return total + (count / text.length) * ((count - 1) / (text.length - 1));
-        }, 0);
-
-        // Normalize
-        IC = settings.letters * sum;
-
-        return IC;
-    }
 
     /**
      * @private
@@ -62,7 +36,7 @@ function Friedman() {
             ICs;
 
         utils.log('Checking most probable key length');
-        utils.log('Index of Coincidence for English:', settings.IC);
+        utils.log('Index of Coincidence for English:', IC_ENGLISH);
 
         cipherText = cipher;
 
@@ -89,7 +63,7 @@ function Friedman() {
             IC,
             sumColumnICs;
 
-        sumColumnICs = columns.map(calculateIC).reduce(function(total, IC) {
+        sumColumnICs = columns.map(utils.calculateIC).reduce(function(total, IC) {
             return total + IC;
         });
 
@@ -101,7 +75,7 @@ function Friedman() {
     }
 
     function sortByClosestIC(a, b) {
-        return Math.abs(a.IC - settings.IC) > Math.abs(b.IC - settings.IC);
+        return Math.abs(a.IC - IC_ENGLISH) > Math.abs(b.IC - IC_ENGLISH);
     }
 
 }
