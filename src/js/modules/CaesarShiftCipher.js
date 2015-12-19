@@ -1,26 +1,13 @@
-var utils = require('./utils.js');
+var IC    = require('./IndexOfCoincidence'),
+    utils = require('./Utils');
 
-function FrequencyAnalyzer() {
+function Caesar() {
     'use strict';
 
     return {
-        getKey: getKey
+        findShiftLetter: findShiftLetter,
+        shiftText: shiftText
     };
-
-    function getKey(cipherText, keyLength) {
-        var columns,
-            i,
-            key = '';
-
-        columns = utils.splitTextIntoColumns(cipherText, keyLength);
-
-        for(i = 0; i < keyLength; i++) {
-            utils.log('Finding key letter', i+1, 'of', keyLength);
-            key += findShiftLetter(columns[i]);
-        }
-
-        return cipherText.substr(0, keyLength);
-    }
 
     function findShiftLetter(text) {
         var i,
@@ -30,7 +17,7 @@ function FrequencyAnalyzer() {
             shifted.push({
                 shift: i,
                 text: shiftText(text, i),
-                ic: utils.calculateIC(text)
+                ic: IC.calculateIC(text)
             });
         }
     }
@@ -45,4 +32,4 @@ function FrequencyAnalyzer() {
     }
 }
 
-module.exports = FrequencyAnalyzer();
+module.exports = Caesar();

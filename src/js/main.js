@@ -1,3 +1,3 @@
-var Vigenere = require('./vigenere.js');
+var vigenere = require('./modules/Vigenere');
 
-Vigenere.init();
+vigenere.init();
