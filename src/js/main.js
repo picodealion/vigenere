@@ -1,6 +1,6 @@
 var Vigenere = require('./vigenere.js');
 
 Vigenere.init({
-    minLength: 3,
+    minLength: 4,
     maxLength: 12
 });

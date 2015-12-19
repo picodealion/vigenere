@@ -14,15 +14,13 @@ function Kasiski() {
             GCDs,
             recurringStrings;
 
-        utils.log('Step 1: Define key length using Kasiski method');
-
         cipherText = cipher;
 
         recurringStrings = getRecurringStrings(minLength, maxLength);
         distances = getDistances(recurringStrings);
         GCDs = getGreatestCommonDenominators(distances);
 
-        utils.log('Most probable key lengths: ' + GCDs);
+        utils.log('Most probable key lengths:', GCDs);
 
         return GCDs;
     }
@@ -80,7 +78,7 @@ function Kasiski() {
         }
 
         if(recurring.length > 0)
-            utils.log("Recurring strings:" + recurring.map(function(item) { return item.string; }));
+            utils.log("Recurring strings:", recurring.map(function(item) { return item.string; }));
         else {
             utils.log('No recurring strings found :(. Either the key is too long or the ciphertext is too short to break the code.');
         }
@@ -89,7 +87,7 @@ function Kasiski() {
     }
 
     function getRecurringStringsOfLength(length) {
-        utils.log('Finding recurring strings of length ' + length);
+        utils.log('Finding recurring strings of length', length);
 
         var count,
             pos = 0,
@@ -103,7 +101,7 @@ function Kasiski() {
             count = cipherText.match(regexp).length;
 
             if(!string.match(' ') && count > 1) {
-                utils.log(string + ' occurs ' + count + ' times');
+                utils.log(string, 'occurs', count, 'times');
                 recurring.push(getStringPositions(string));
             }
 

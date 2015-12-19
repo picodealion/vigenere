@@ -61,13 +61,15 @@ function Friedman() {
         var bestMatch,
             ICs;
 
-        utils.log('Checking most probable key length', true);
-        utils.log('Index of Coincidence for English: ' + settings.IC, true);
+        utils.log('Checking most probable key length');
+        utils.log('Index of Coincidence for English:', settings.IC);
 
         cipherText = cipher;
 
         ICs = calculateICForKeylengths(lengths);
         bestMatch = ICs.sort(sortByClosestIC)[0];
+
+        utils.log('Best guess for key length:', bestMatch.keyLength);
 
         return bestMatch.keyLength;
     }
@@ -93,7 +95,7 @@ function Friedman() {
 
         IC = sumColumnICs / columns.length;
 
-        utils.log('IC for key of length ' + keyLength + ': ' + IC, true);
+        utils.log('IC for key of length', keyLength + ':', IC);
 
         return IC;
     }

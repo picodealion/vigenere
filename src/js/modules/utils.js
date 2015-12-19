@@ -6,6 +6,7 @@ function Utils() {
         log: log,
         normalize: normalize,
         replaceWithSpaces: replaceWithSpaces,
+        settings: settings,
         splitTextIntoColumns: splitTextIntoColumns,
         unique: unique
     };
@@ -42,6 +43,47 @@ function Utils() {
         return factors;
     }
 
+    function log()
+    {
+        var logElement = document.getElementById('log'),
+            logline = document.createElement('span'),
+            output = Array.prototype.slice.call(arguments).join(' ');
+
+        logline.innerText = output;
+        logline.className = "logline";
+
+        logElement.appendChild(logline);
+        logElement.scrollTop = logElement.scrollHeight;
+    }
+
+    function normalize(input)
+    {
+        return input.toLowerCase().replace(/[^a-z]/g, '');
+    }
+
+    function replaceWithSpaces(text, start, end) {
+        var i,
+            spaces = '';
+
+        for(i = 0; i < (end - start); i++) {
+            spaces += ' ';
+        }
+
+        return text.substring(0, start) + spaces + text.substring(end);
+    }
+
+    function settings(defaults, options) {
+        var i;
+
+        for(i in options) {
+            if(options.hasOwnProperty(i)) {
+                defaults[i] = options[i];
+            }
+        }
+
+        return defaults;
+    }
+
     /**
      * @private
      *
@@ -75,34 +117,6 @@ function Utils() {
         }
 
         return columns;
-    }
-
-    function log(output)
-    {
-        var logElement = document.getElementById('log'),
-            logline = document.createElement('span');
-
-        logline.innerText = output;
-        logline.className = "logline";
-
-        logElement.appendChild(logline);
-        logElement.scrollTop = logElement.scrollHeight;
-    }
-
-    function normalize(input)
-    {
-        return input.toLowerCase().replace(/[^a-z]/g, '');
-    }
-
-    function replaceWithSpaces(text, start, end) {
-        var i,
-            spaces = '';
-
-        for(i = 0; i < (end - start); i++) {
-            spaces += ' ';
-        }
-
-        return text.substring(0, start) + spaces + text.substring(end);
     }
 
     function unique(item, index, self) {
