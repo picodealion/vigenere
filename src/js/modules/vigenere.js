@@ -1,4 +1,4 @@
-var caesar  = require('./CaesarShiftCipher'),
+var caesar  = require('./CaesarShift'),
     GCD     = require('./GreatestCommonDenominator'),
     IC      = require('./IndexOfCoincidence'),
     strings = require('./Strings'),
@@ -83,7 +83,7 @@ function Vigenere() {
             key += caesar.findShiftLetter(columns[i]);
         }
 
-        return cipherText.substr(0, keyLength);
+        return key;
     }
 
     function guessKeyLengthsKasiski(cipherText, minLength, maxLength) {
