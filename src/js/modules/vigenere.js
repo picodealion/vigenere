@@ -13,6 +13,7 @@ function Vigenere() {
             elements: {
                 input: document.getElementById('ciphertext'),
                 output: document.getElementById('plaintext'),
+                key: document.getElementById('key'),
                 log: document.getElementById('log'),
                 start: document.getElementById('decipher')
             }
@@ -35,7 +36,8 @@ function Vigenere() {
         var bestKeyLength,
             cipherText,
             key,
-            probableKeyLengths;
+            probableKeyLengths,
+            solution;
 
         utils.log('Starting to decipher');
         cipherText = utils.normalize(settings.elements.input.value);
@@ -48,13 +50,28 @@ function Vigenere() {
 
         utils.log('Step 3: Perform frequency analyses to decipher key');
         key = getKeyByFrequencyAnalysis(cipherText, bestKeyLength);
+        settings.elements.key.innerText = key;
 
-        end(key);
+        utils.log('Step 4: Deciphering the cipher text');
+        solution = decipherText(cipherText, key);
+
+        end(solution);
     }
 
-    function end(result) {
+    function end(solution) {
+        settings.elements.output.innerText = solution;
         utils.log('Finished all steps.');
-        utils.log('Best guess:', result);
+    }
+
+    function decipherText(text, key) {
+        var columns = strings.splitTextIntoColumns(text, key.length),
+            i;
+
+        for(i = 0; i < columns.length; i++) {
+            columns[i] = caesar.shiftText(columns[i], key.charCodeAt(i) - 97);
+        }
+
+        return strings.mergeColumns(columns);
     }
 
     function findBestKeyLengthFriedman(cipherText, lengths) {
@@ -82,6 +99,10 @@ function Vigenere() {
             utils.log('Finding key letter', i+1, 'of', keyLength);
             key += caesar.findShiftLetter(columns[i]);
         }
+
+        key = strings.reduceRepeatedWord(key);
+
+        utils.log('\nBest guess for the key:', key, "\n\n");
 
         return key;
     }

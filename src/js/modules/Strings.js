@@ -8,6 +8,8 @@ function Strings() {
     return {
         countLetters: countLetters,
         getRecurringStrings: getRecurringStrings,
+        mergeColumns: mergeColumns,
+        reduceRepeatedWord: reduceRepeatedWord,
         replaceWithSpaces: replaceWithSpaces,
         splitTextIntoColumns: splitTextIntoColumns
     };
@@ -25,7 +27,7 @@ function Strings() {
             i;
 
         for(i = 0; i < 26; i++) {
-            counts.push(0);
+            counts[i] = 0;
         }
 
         for(i = 0; i < text.length; i++) {
@@ -94,6 +96,49 @@ function Strings() {
         }
 
         return result;
+    }
+
+    function mergeColumns(columns) {
+        var i,
+            j,
+            result = '';
+
+        for(i = 0; i < columns[0].length; i++) {
+            for(j = 0; j < columns.length; j++) {
+                if(columns[j][i]) {
+                    result += columns[j][i];
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * @public
+     *
+     * @param {string} text The text to check for repeated words
+     * @returns {string} The repeated words
+     *
+     * @description
+     * Checks if the string consists of one or more exact duplicates of the same word
+     * and nothing more, returns that word
+     *
+     * @examples
+     * removeDuplicateWord('testtest');
+     * // -> 'test'
+     *
+     * removeDuplicateWord('testtesta');
+     * // -> 'testtesta'
+     */
+    function reduceRepeatedWord(text) {
+        var matches = text.match(/^(\w+)?\1+$/);
+
+        if(matches) {
+            text = matches[1];
+        }
+
+        return text;
     }
 
     function replaceWithSpaces(text, start, end) {

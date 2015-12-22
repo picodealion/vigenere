@@ -1,5 +1,6 @@
-var IC    = require('./IndexOfCoincidence'),
-    utils = require('./Utils');
+var IC      = require('./IndexOfCoincidence'),
+    strings = require('./Strings'),
+    utils   = require('./Utils');
 
 function Caesar() {
     'use strict';
@@ -15,8 +16,11 @@ function Caesar() {
 
     function findShiftLetter(text) {
         var i,
+            letter,
             shiftedText,
             shifted = [];
+
+        utils.log('Shifting text to find the text that resembles English most');
 
         for(i = 0; i < 26; i++) {
             shiftedText = shiftText(text, i);
@@ -27,52 +31,43 @@ function Caesar() {
             });
         }
 
-        console.log(shifted);
         shifted.sort(function(a, b) {
-            return a.chi - b    .chi;
+            return a.chi - b.chi;
         });
-        console.log(shifted[0]);
 
-        return String.fromCharCode(shifted[0].shift + 97);
+        letter = String.fromCharCode(shifted[0].shift + 97);
+
+        utils.log("Lowest chi-squared occurs with letter:", letter, "(" + shifted[0].chi + ")");
+
+        return letter;
     }
 
     function getChiSquared(text) {
-        var chi = 0,
-            count,
-            expectedChi = 0,
+        var chiSquared = 0,
+            counts = strings.countLetters(text),
             expectedCount,
-            i,
-            letter,
-            match,
-            regexp;
+            i;
 
-        for(i = 0; i < 26; i++) {
-            letter = String.fromCharCode(i + 97);
-            regexp = new RegExp(letter, 'g');
-            match  = text.match(regexp);
-
-            if(match) {
-                count  = match.length;
-                expectedChi += FREQUENCY_ENGLISH[i] * text.length;
-                chi += count;
+            for(i = 0; i < 26; i++) {
+                expectedCount =  text.length * FREQUENCY_ENGLISH[i];
+                chiSquared += Math.pow((counts[i] - expectedCount), 2) / (expectedCount);
             }
 
-            console.log(letter, regexp, count, chi, expectedChi);
-
-        }
-
-        console.log(chi, expectedChi);
-
-        return (Math.pow(chi - expectedChi, 2) / expectedChi);
+        return chiSquared;
     }
 
     function shiftText(text, shift) {
-        return text.split('').map(function(char) {
-            var letterIndex = char.charCodeAt() - 97,
-                newLetter = (letterIndex + shift) % 26;
+        var i,
+            newText = '',
+            newLetter;
 
-            return String.fromCharCode(newLetter + 97);
-        }).join('');
+        for(i = 0; i < text.length; i++) {
+            newLetter = ((text.charCodeAt(i) - 97) + (26 - shift)) % 26;
+
+            newText += String.fromCharCode(newLetter + 97);
+        }
+
+        return newText;
     }
 }
 
